@@ -48,8 +48,8 @@ def homepage():
             f"/api/v1.0/precipitation<br/>"
             f"/api/v1.0/stations<br/>"
             f"/api/v1.0/tobs<br/>"
-            f"/api/v1.0/<start><br/>"
-            f"/api/v1.0/<start>/<end>")
+            f"/api/v1.0/YYYY-MM-DD<br/>"
+            f"/api/v1.0/YYYY-MM-DD/YYYY-MM-DD")
 
 @app.route("/api/v1.0/precipitation")
 def precipitation():
@@ -95,7 +95,7 @@ def tobs():
     return jsonify(all_tobs)
 
 @app.route("/api/v1.0/<start>")
-def start_end_date(start):
+def start_date(start):
     # Create our session (link) from Python to the DB
     session = Session(engine)
     return_data = session.query(func.min(Measurement.tobs),func.max(Measurement.tobs), func.avg(Measurement.tobs)).filter(Measurement.date >= start).all()
@@ -112,7 +112,7 @@ def start_end_date(start):
     return jsonify(all_start)
 
 @app.route("/api/v1.0/<start>/<end>")
-def start_date(start, end):
+def start_end_date(start, end):
     # Create our session (link) from Python to the DB
     session = Session(engine)
     return_data_stend = session.query(func.min(Measurement.tobs),func.max(Measurement.tobs), func.avg(Measurement.tobs)).filter(Measurement.date >= start).filter(Measurement.date <= end).all()
